@@ -18,7 +18,7 @@ Student Number: 205815111
 
 The first two weeks: 23/10/2022 - 05/11/2022
 
-- Discussion about the project's main subject with roi.
+- Discussion about the project's main subject with Roi.
 
 - Researching silhouette rendering
 
