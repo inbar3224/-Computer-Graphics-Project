@@ -14,12 +14,19 @@ Student Number: 205815111
 
 ## Reading Materials:
 https://en.wikipedia.org/wiki/Silhouette
+
 https://www.youtube.com/watch?v=bP2HpmoHTmg
+
 https://www.dgp.toronto.edu/~hertzman/hertzmann-intro3d.pdf
+
 https://www.youtube.com/watch?v=qR3YhjpmWZ8
+
 https://web.media.mit.edu/~raskar/UNC/NPR/sil.html
+
 https://www.researchgate.net/publication/265276114_3D_Silhouette_Rendering_Algorithms_using_Vectorisation_Technique_from_Kedah_Topography_Map
+
 https://prezi.com/anzuolvcmj1v/silhouette-rendering-techniques/
+
 https://tobias.isenberg.cc/personal/papers/Isenberg_2003_ADG.pdf
 
 ## Progress:
