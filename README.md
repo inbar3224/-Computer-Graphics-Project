@@ -13,21 +13,21 @@ Student Number: 205815111
 ## Project Description:
 
 ## Reading Materials:
-https://en.wikipedia.org/wiki/Silhouette
+https://blog.vfrz.fr/2d-silhouette-effect-in-opengl/
 
-https://www.youtube.com/watch?v=bP2HpmoHTmg
+https://prideout.net/blog/old/blog/index.html@tag=opengl-silhouette.html
 
-https://www.dgp.toronto.edu/~hertzman/hertzmann-intro3d.pdf
+https://developer.download.nvidia.com/CgTutorial/cg_tutorial_chapter09.html
 
-https://www.youtube.com/watch?v=qR3YhjpmWZ8
+http://www.opengl-tutorial.org/beginners-tutorials/tutorial-8-basic-shading/
 
-https://web.media.mit.edu/~raskar/UNC/NPR/sil.html
+https://en.wikibooks.org/wiki/GLSL_Programming/Unity/Specular_Highlights_at_Silhouettes
 
-https://www.researchgate.net/publication/265276114_3D_Silhouette_Rendering_Algorithms_using_Vectorisation_Technique_from_Kedah_Topography_Map
+https://en.wikibooks.org/wiki/GLSL_Programming/Unity/Silhouette_Enhancement
 
-https://prezi.com/anzuolvcmj1v/silhouette-rendering-techniques/
+https://gamedev.stackexchange.com/questions/68401/how-can-i-draw-outlines-around-3d-models
 
-https://tobias.isenberg.cc/personal/papers/Isenberg_2003_ADG.pdf
+https://gamedev.stackexchange.com/questions/103365/glsl-2d-silhouette
 
 ## Progress:
 
