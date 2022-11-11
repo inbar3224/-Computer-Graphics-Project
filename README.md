@@ -11,11 +11,16 @@ Name: Avital Berendorf
 Student Number: 205815111
 
 ## Project Description:
+In this project we would load models to the screen and render the silhouette edges (outlines) around the models
 
 ## Reading Materials:
-https://blog.vfrz.fr/2d-silhouette-effect-in-opengl/
-
+### Truly Relevant:
 https://prideout.net/blog/old/blog/index.html@tag=opengl-silhouette.html
+
+https://gamedev.stackexchange.com/questions/68401/how-can-i-draw-outlines-around-3d-models
+
+### The Rest Of The Research:
+https://blog.vfrz.fr/2d-silhouette-effect-in-opengl/
 
 https://developer.download.nvidia.com/CgTutorial/cg_tutorial_chapter09.html
 
@@ -25,8 +30,6 @@ https://en.wikibooks.org/wiki/GLSL_Programming/Unity/Specular_Highlights_at_Silh
 
 https://en.wikibooks.org/wiki/GLSL_Programming/Unity/Silhouette_Enhancement
 
-https://gamedev.stackexchange.com/questions/68401/how-can-i-draw-outlines-around-3d-models
-
 https://gamedev.stackexchange.com/questions/103365/glsl-2d-silhouette
 
 ## Progress:
@@ -34,12 +37,13 @@ https://gamedev.stackexchange.com/questions/103365/glsl-2d-silhouette
 The first two weeks: 23/10/2022 - 05/11/2022
 
 - Discussion about the project's main subject with Roi.
-
 - Researching silhouette rendering
 
 Week 3: 06/11/2022 - 12/11/2022
 
-- TO DO
+- Researching silhouette shading opengl (because the original research was irrelevant)
+- Finally nailing project's subject: using shaders to generate silhouette edges (outlines)
+- Receiving initial skeleton from Roi
 
 Week 4: 13/11/2022 - 19/11/2022
 
