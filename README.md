@@ -45,17 +45,15 @@ Week 3: 06/11/2022 - 12/11/2022
 - Finally nailing project's subject: using shaders to generate silhouette edges (outlines)
 - Receiving initial skeleton from Roi
 
-Week 4: 13/11/2022 - 19/11/2022
+Week 4-5 13/11/2022 - 26/11/2022
 
-- TO DO
-
-Week 5: 20/11/2022 - 26/11/2022
-
-- TO DO
+- Research about OpenGL
+- Research about .frag files
 
 Week 6: 27/11/2022 - 03/12/2022
 
-- TO DO
+- Checkbox for silhouette shading
+- Beginning shader- can't find this file at this point
 
 Week 7: 04/12/2022 - 10/12/2022
 
