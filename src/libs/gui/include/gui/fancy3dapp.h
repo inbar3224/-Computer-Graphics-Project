@@ -9,77 +9,73 @@
 #include <imgui_widgets/imGuIZMOquat.h>
 
 namespace crl {
-namespace gui {
+    namespace gui {
+        class Fancy3DApp : public Application {
+            public:
+                Fancy3DApp(const char* title = "Shadows demo", std::string iconPath = DATA_FOLDER "/crl_icon_grey.png") :
+                    Application(title, iconPath) {
+                    camera.aspectRatio = float(width) / height;
 
+                    if (!shadowMapFBO.Init(this->width, this->height)) {
+                        std::cout << "Shadow map initialization failed\n";
+                        exit(0);
+                    }
 
-class Fancy3DApp : public Application {
-public:
-    Fancy3DApp(const char* title = "Shadows demo",
-        std::string iconPath = DATA_FOLDER
-        "/crl_icon_grey.png")
-        : Application(title, iconPath) {
-        camera.aspectRatio = float(width) / height;
+                    glEnable(GL_DEPTH_TEST);
+                }
 
-        if (!shadowMapFBO.Init(this->width, this->height)) {
-            std::cout << "Shadow map initialization failed\n";
-            exit(0);
-        }
+	            virtual void resizeWindow(int width, int height) override;
 
-        glEnable(GL_DEPTH_TEST);
-    }
+                bool mouseMove(double xpos, double ypos) override;
 
-	virtual void resizeWindow(int width, int height) override;
+                bool scrollWheel(double xoffset, double yoffset) override;
 
-    bool mouseMove(double xpos, double ypos) override;
+                void draw() override;
 
-    bool scrollWheel(double xoffset, double yoffset) override;
+                virtual void prepareToDraw() {}
 
-    void draw() override;
+	            virtual void drawAuxiliaryInfo();
 
-    virtual void prepareToDraw() {}
+	            virtual void drawImGui();
 
-	virtual void drawAuxiliaryInfo();
+                void shadowPass();
 
-	virtual void drawImGui();
+                void renderPass();
 
-    void shadowPass();
+                // objects drawn with a shadowMapRenderer (during shadow pass) will cast a shadow
+                virtual void drawShadowCastingObjects() = 0;
 
-    void renderPass();
+                // objects drawn with a shadowShader (during the render pass) will have shadows cast on them
+                virtual void drawObjectsWithShadows() = 0;
 
-    // objects drawn with a shadowMapRenderer (during shadow pass) will cast a
-    // shadow
-    virtual void drawShadowCastingObjects() = 0;
+                // objects drawn with basic shadowShader (during the render pass) will not have shadows cast on them
+                virtual void drawObjectsWithoutShadows() = 0;
 
-    // objects drawn with a shadowShader (during the render pass) will have
-    // shadows cast on them
-    virtual void drawObjectsWithShadows() = 0;
+                // draw silhouette 
+                virtual void drawObjectsWithSilhouette() = 0;
 
-    // objects drawn with basic shadowShader (during the render pass) will not
-    // have shadows cast on them
-    virtual void drawObjectsWithoutShadows() = 0;
+                // cancel silhouette
+                virtual void drawObjectsWithoutSilhouette() = 0;
 
-    TrackingCamera camera;
-    ShadowCastingLight light;
-    ShadowMapFBO shadowMapFBO;
-    float shadowbias = 0.0001f;
+                TrackingCamera camera;
+                ShadowCastingLight light;
+                ShadowMapFBO shadowMapFBO;
+                float shadowbias = 0.0001f;
 
-    Shader shadowShader =
-        Shader(SHADER_FOLDER "/basic_lighting.vert",
-            SHADER_FOLDER "/basic_shadow_lighting.frag");
-    Shader shadowMapRenderer = Shader(SHADER_FOLDER "/render_shadow.vert",
-        SHADER_FOLDER "/render_shadow.frag");
-    Shader basicShader = Shader(SHADER_FOLDER "/basic_lighting.vert",
-        SHADER_FOLDER "/basic_lighting.frag");
+                Shader shadowShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/basic_shadow_lighting.frag");
+                Shader shadowMapRenderer = Shader(SHADER_FOLDER "/render_shadow.vert", SHADER_FOLDER "/render_shadow.frag");
+                Shader basicShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/basic_lighting.frag");
 
-	bool drawSelfShadows = false;
-	Model ground = getGroundModel();
-private:
-    int PCF_mode=0;
-    int PCF_samples_num=25;
-    float shadow_spread=0.002;
-    float light_size = 1;
-};
+	            bool drawSelfShadows = false;
+                Model ground = getGroundModel();
 
+                bool drawSilhouetteShading = false;
 
-}  // namespace gui
+            private:
+                int PCF_mode=0;
+                int PCF_samples_num=25;
+                float shadow_spread=0.002;
+                float light_size = 1;
+        };
+    }  // namespace gui
 }  // namespace crl

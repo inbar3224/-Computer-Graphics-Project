@@ -1,7 +1,6 @@
 #include <gui/fancy3dapp.h>
 
-void crl::gui::Fancy3DApp::resizeWindow(int width, int height)
-{
+void crl::gui::Fancy3DApp::resizeWindow(int width, int height) {
 	camera.aspectRatio = float(width) / height;
 
 	if (!shadowMapFBO.Init(this->width, this->height)) {
@@ -12,14 +11,12 @@ void crl::gui::Fancy3DApp::resizeWindow(int width, int height)
 	return Application::resizeWindow(width, height);
 }
 
-bool crl::gui::Fancy3DApp::mouseMove(double xpos, double ypos)
-{
+bool crl::gui::Fancy3DApp::mouseMove(double xpos, double ypos) {
 	camera.processMouseMove(mouseState, keyboardState);
 	return true;
 }
 
-bool crl::gui::Fancy3DApp::scrollWheel(double xoffset, double yoffset)
-{
+bool crl::gui::Fancy3DApp::scrollWheel(double xoffset, double yoffset) {
 	camera.processMouseScroll(xoffset, yoffset);
 	return true;
 }
@@ -40,19 +37,20 @@ void crl::gui::Fancy3DApp::drawAuxiliaryInfo() {
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void crl::gui::Fancy3DApp::drawImGui()
-{
+void crl::gui::Fancy3DApp::drawImGui() {
 	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Once);
 	ImGui::Begin("Main Menu");
 	static bool showDemo = false;
 	ImGui::Checkbox("Show ImGui Demo Window", &showDemo);
-	if(showDemo)
+	if (showDemo) {
 		ImGui::ShowDemoWindow();
+	}
 	ImGui::Checkbox("Draw Console", &showConsole);
 	ImGui::Checkbox("Automanage Console", &automanageConsole);
 
 
 	ImGui::Checkbox("Selfshadowing", &drawSelfShadows);
+	ImGui::Checkbox("Silhouette Shading", &drawSilhouetteShading);
 	ImGui::Combo("PCF mode", &PCF_mode, "Normal\0Variable grid\0Weighted grid\0Poisson\00Poisson Stratified\0Poisson Rotated\0Poisson PCSS\0\0");
 	ImGui::SliderInt("Samples", &PCF_samples_num, 1, 64);
 	ImGui::SliderFloat("Light Proj Scale", &light.s, 0.0f, 5.0f);
@@ -73,18 +71,13 @@ void crl::gui::Fancy3DApp::drawImGui()
 	ImGuiIO& io = ImGui::GetIO();
 	ImGuizmo::BeginFrame();
 	glm::mat4 cameraview = camera.getViewMatrix();
-	ImGuizmo::ViewManipulate(glm::value_ptr(camera.viewMatrix), 10.0,
-		ImVec2(io.DisplaySize.x - 128, 0),
-		ImVec2(128, 128), 0x10101010);
-	ImGui::ShowMetricsWindow();
-	
+	ImGuizmo::ViewManipulate(glm::value_ptr(camera.viewMatrix), 10.0, ImVec2(io.DisplaySize.x - 128, 0), ImVec2(128, 128), 0x10101010);
+	ImGui::ShowMetricsWindow();	
 }
 
-void crl::gui::Fancy3DApp::draw()
-{
+void crl::gui::Fancy3DApp::draw() {
 	glClearColor(clearColor[0], clearColor[1], clearColor[2], 1.00f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |
-		GL_STENCIL_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	prepareToDraw();
 
@@ -94,13 +87,11 @@ void crl::gui::Fancy3DApp::draw()
 	drawAuxiliaryInfo();
 }
 
-void crl::gui::Fancy3DApp::shadowPass()
-{
+void crl::gui::Fancy3DApp::shadowPass() {
 	shadowMapFBO.BindForWriting();
 	glClear(GL_DEPTH_BUFFER_BIT);
 	shadowMapRenderer.use();
-	shadowMapRenderer.setMat4("projection",
-		light.getOrthoProjectionMatrix());
+	shadowMapRenderer.setMat4("projection", light.getOrthoProjectionMatrix());
 	shadowMapRenderer.setMat4("view", light.getViewMatrix());
 	glViewport(0, 0, shadowMapFBO.bufferWidth, shadowMapFBO.bufferHeight);
 
@@ -108,16 +99,15 @@ void crl::gui::Fancy3DApp::shadowPass()
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glUseProgram(0);
-#ifdef RETINA_SCREEN
-	// temporal one... need more investigation
-	glViewport(0, 0, width * 2, height * 2);
-#else
-	glViewport(0, 0, width, height);
-#endif
+	#ifdef RETINA_SCREEN
+		// temporal one... need more investigation
+		glViewport(0, 0, width * 2, height * 2);
+	#else
+		glViewport(0, 0, width, height);
+	#endif
 }
 
-void crl::gui::Fancy3DApp::renderPass()
-{
+void crl::gui::Fancy3DApp::renderPass() {
 	shadowMapFBO.BindForReading(GL_TEXTURE0, GL_TEXTURE1); // to do: organize texture units
 
 	auto shader_setup = [&](Shader& shader) {
@@ -131,17 +121,18 @@ void crl::gui::Fancy3DApp::renderPass()
 
 	// set up shaders
 	shader_setup(shadowShader);
-	shadowShader.setMat4("lightProjection",
-		light.getOrthoProjectionMatrix());
+	shadowShader.setMat4("lightProjection", light.getOrthoProjectionMatrix());
 	shadowShader.setMat4("lightView", light.getViewMatrix());
 	shadowShader.setInt("shadowMap", 0); // shadow map is set to GL_TEXTURE0
 	shadowShader.setInt("shadowDepth", 1); // shadow depth is set to GL_TEXTURE1
 	shadowShader.setFloat("bias", shadowbias);
 	shadowShader.setInt("PCF_mode", PCF_mode);
-	if(PCF_mode == 1) // PCF_mode = grid
+	if (PCF_mode == 1) {// PCF_mode = grid
 		shadowShader.setInt("PCF_samples_num", sqrt(PCF_samples_num));
-	else
+	}
+	else {
 		shadowShader.setInt("PCF_samples_num", PCF_samples_num);
+	}
 	shadowShader.setFloat("shadow_spread", shadow_spread);
 	shadowShader.setFloat("light_size", light_size);
 	
