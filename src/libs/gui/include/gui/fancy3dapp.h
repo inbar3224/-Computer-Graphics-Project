@@ -11,7 +11,7 @@
 namespace crl {
     namespace gui {
         class Fancy3DApp : public Application {
-            public:
+		    public:
                 Fancy3DApp(const char* title = "Shadows demo", std::string iconPath = DATA_FOLDER "/crl_icon_grey.png") :
                     Application(title, iconPath) {
                     camera.aspectRatio = float(width) / height;
@@ -24,7 +24,7 @@ namespace crl {
                     glEnable(GL_DEPTH_TEST);
                 }
 
-	            virtual void resizeWindow(int width, int height) override;
+                virtual void resizeWindow(int width, int height) override;
 
                 bool mouseMove(double xpos, double ypos) override;
 
@@ -34,9 +34,9 @@ namespace crl {
 
                 virtual void prepareToDraw() {}
 
-	            virtual void drawAuxiliaryInfo();
+                virtual void drawAuxiliaryInfo();
 
-	            virtual void drawImGui();
+                virtual void drawImGui();
 
                 void shadowPass();
 
@@ -66,15 +66,16 @@ namespace crl {
                 Shader shadowMapRenderer = Shader(SHADER_FOLDER "/render_shadow.vert", SHADER_FOLDER "/render_shadow.frag");
                 Shader basicShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/basic_lighting.frag");
 
-	            bool drawSelfShadows = false;
+                bool drawSelfShadows = false;
                 Model ground = getGroundModel();
 
                 bool drawSilhouetteShading = false;
-
+                Model ground1 = getGroundModel();
+                Shader silhouetteShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/silhouette.frag");
             private:
-                int PCF_mode=0;
-                int PCF_samples_num=25;
-                float shadow_spread=0.002;
+                int PCF_mode = 0;
+                int PCF_samples_num = 25;
+                float shadow_spread = 0.002;
                 float light_size = 1;
         };
     }  // namespace gui

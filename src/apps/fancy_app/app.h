@@ -8,13 +8,13 @@ using namespace crl::gui;
 
 class App : public Fancy3DApp {
     public:
-        App(const char* title = "Fancy app", std::string iconPath = DATA_FOLDER "/crl_icon_grey.png") : 
+        App(const char* title = "Fancy app", std::string iconPath = DATA_FOLDER "/crl_icon_grey.png") :
             Fancy3DApp(title, iconPath) {
 
         }
 
         virtual ~App() override {
-        
+
         }
 
         void process() override {
@@ -43,12 +43,17 @@ class App : public Fancy3DApp {
 
         // draw silhouette 
         virtual void drawObjectsWithSilhouette() override {
-            // take from drawObjectsWithShadows()
+            if (drawSilhouetteShading == true) {
+                model.draw(silhouetteShader);
+            }
+            ground1.draw(silhouetteShader);
         }
 
         // cancel silhouette
         virtual void drawObjectsWithoutSilhouette() override {
-            // take from drawObjectsWithoutShadows()
+            if (drawSilhouetteShading == false) {
+                model.draw(basicShader);
+            }
         }
 
         virtual bool drop(int count, const char** fileNames) override {
