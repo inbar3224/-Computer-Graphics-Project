@@ -57,7 +57,7 @@ void crl::gui::Fancy3DApp::drawImGui() {
 	ImGui::SliderFloat("Shadow bias", &shadowbias, 0.0f, 0.01f, "%.5f", ImGuiSliderFlags_Logarithmic);
 	ImGui::SliderFloat("Shadow Spread", &shadow_spread, 0.0f, 0.01f, "%.5f");
 	ImGui::SliderFloat("Light Size", &light_size, 0.0f, 1.0f, "%.5f");
-
+	
 
 	ImGui::InputScalarN("Light location", ImGuiDataType_Float, &light.pos, 3);
 
@@ -72,7 +72,7 @@ void crl::gui::Fancy3DApp::drawImGui() {
 	ImGuizmo::BeginFrame();
 	glm::mat4 cameraview = camera.getViewMatrix();
 	ImGuizmo::ViewManipulate(glm::value_ptr(camera.viewMatrix), 10.0, ImVec2(io.DisplaySize.x - 128, 0), ImVec2(128, 128), 0x10101010);
-	ImGui::ShowMetricsWindow();
+	ImGui::ShowMetricsWindow();	
 }
 
 void crl::gui::Fancy3DApp::draw() {
@@ -152,7 +152,7 @@ void crl::gui::Fancy3DApp::renderPass() {
 	}
 	silhouetteShader.setFloat("shadow_spread", shadow_spread);
 	silhouetteShader.setFloat("light_size", light_size);
-
+	
 	shader_setup(basicShader);
 	// better lighting approximation here so that regions of the model do
 	// not remain forever shaded dark...
@@ -160,6 +160,4 @@ void crl::gui::Fancy3DApp::renderPass() {
 
 	drawObjectsWithShadows();
 	drawObjectsWithoutShadows();
-	drawObjectsWithSilhouette();
-	drawObjectsWithoutSilhouette();
 }

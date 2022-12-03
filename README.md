@@ -38,22 +38,26 @@ The first two weeks: 23/10/2022 - 05/11/2022
 
 - Discussion about the project's main subject with Roi.
 - Researching silhouette rendering
+- Total of 8 hours
 
 Week 3: 06/11/2022 - 12/11/2022
 
 - Researching silhouette shading opengl (because the original research was irrelevant)
 - Finally nailing project's subject: using shaders to generate silhouette edges (outlines)
 - Receiving initial skeleton from Roi
+- Total 0f 12 hours
 
 Week 4-5 13/11/2022 - 26/11/2022
 
 - Research about OpenGL
 - Research about .frag files
+- Total of 6 hours
 
 Week 6: 27/11/2022 - 03/12/2022
 
 - Checkbox for silhouette shading
 - Beginning shader- can't find this file at this point
+- Total of 8 hours
 
 Week 7: 04/12/2022 - 10/12/2022
 
