@@ -55,15 +55,15 @@ namespace crl {
 			ShadowMapFBO shadowMapFBO;
 			float shadowbias = 0.0001f;
 
-			Shader shadowShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/basic_shadow_lighting.frag");
-			Shader shadowMapRenderer = Shader(SHADER_FOLDER "/render_shadow.vert", SHADER_FOLDER "/render_shadow.frag");
-			Shader basicShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/basic_lighting.frag");
+			Shader shadowShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/basic_shadow_lighting.frag", "shadowShader");
+			Shader shadowMapRenderer = Shader(SHADER_FOLDER "/render_shadow.vert", SHADER_FOLDER "/render_shadow.frag", "shadowMapRenderer");
+			Shader basicShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/basic_lighting.frag", "basicShader");
 
 			bool drawSelfShadows = false;
 			Model ground = getGroundModel();
 
 			bool drawSilhouetteShading = false;
-			Shader silhouetteShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/silhouette.frag");
+			Shader silhouetteShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/silhouette.frag", "silhouetteShader");
 		private:
 			int PCF_mode = 0;
 			int PCF_samples_num = 25;

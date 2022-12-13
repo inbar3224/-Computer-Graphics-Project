@@ -33,6 +33,7 @@ namespace crl {
 
 		Model::Model(const std::string& path) {
 			loadModel(path);
+			std::cout << "meshes number: " << meshes.size() << std::endl;
 		}
 
 		void Model::draw(const Shader& shader, const V3D& color, const glm::mat4& transform, float alpha) const {
@@ -50,7 +51,7 @@ namespace crl {
 				meshes[i].draw(shader, color, alpha);
 			}
 		}
-
+		// this is the function
 		void Model::draw(const Shader& shader, float alpha) const {
 			shader.use();
 			shader.setMat4("model", getTransform());
@@ -171,6 +172,7 @@ namespace crl {
 				std::vector<Vertex> vertices;
 				std::vector<unsigned int> indices;
 				Mesh::TextureMap textures;
+				std::vector<tinyobj::face_t> faces;
 
 				// Loop over faces(polygon)
 				size_t index_offset = 0;
@@ -223,7 +225,12 @@ namespace crl {
 					}
 				}
 
-				meshes.push_back(Mesh(vertices, indices, textures));
+				for (int i = 0; i < shapes[s].mesh.mine.faceGroup.size(); i++) {
+					auto face = shapes[s].mesh.mine.faceGroup[i];
+					faces.push_back(face);
+				}				
+
+				meshes.push_back(Mesh(vertices, indices, textures, faces));
 			}
 		}
 

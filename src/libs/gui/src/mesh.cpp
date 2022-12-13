@@ -2,10 +2,16 @@
 
 namespace crl {
 	namespace gui {
+		// this one
 		Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
-			std::map<TextureType, std::vector<Texture>> textures) :
-			vertices(vertices), indices(indices), textures(textures) {
+			std::map<TextureType, std::vector<Texture>> textures, std::vector<tinyobj::face_t> faces) :
+			vertices(vertices), indices(indices), textures(textures), faces(faces) {
 			setupMesh();
+			std::cout << "vertices size: " << vertices.size() << std::endl;
+			std::cout << "indices size: " << indices.size() << std::endl;
+			for (int i = 0; i < faces.size(); i++) {
+				faces[i].print();
+			}
 		}
 
 		Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) :
@@ -13,6 +19,7 @@ namespace crl {
 			setupMesh();
 		}
 
+		// second function
 		void Mesh::draw(Shader shader, const V3D& color, float alpha) const {
 			shader.setVec3("objectColor", toGLM(color));
 			shader.setFloat("alpha", alpha);
@@ -37,13 +44,19 @@ namespace crl {
 
 			// draw mesh
 			glBindVertexArray(VAO);
-			glDrawElements(GL_TRIANGLES, (GLsizei)indices.size(), GL_UNSIGNED_INT, nullptr);
+			if (shader.getName().compare("silhouetteShader") == 0) {
+				glDrawElements(GL_TRIANGLES_ADJACENCY, indices.size() * 6, GL_UNSIGNED_INT, nullptr);
+			}
+			else {
+				glDrawElements(GL_TRIANGLES, (GLsizei)indices.size(), GL_UNSIGNED_INT, nullptr);
+			}
 			glBindVertexArray(0);
 
 			// always good practice to set everything back to defaults once configured.
 			glActiveTexture(GL_TEXTURE0);
 		}
 
+		// this is the function
 		void Mesh::draw(Shader shader, float alpha) const {
 			draw(shader, this->defaultColor, alpha);
 		}
@@ -91,6 +104,10 @@ namespace crl {
 			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
 
 			glBindVertexArray(0);
+		}
+
+		void calculateAdjacency(const unsigned int index1, const unsigned int index2, const unsigned int index3) {
+
 		}
 	}  // namespace gui
 }  // namespace crl

@@ -52,5 +52,5 @@ public:
 		return true;
 	}
 public:
-	Model model = Model(DATA_FOLDER "/meshes/3d models/nanosuit.obj");
+	Model model = Model(DATA_FOLDER "/meshes/sphere.obj");
 };

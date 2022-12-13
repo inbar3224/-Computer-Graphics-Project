@@ -57,7 +57,7 @@ void crl::gui::Fancy3DApp::drawImGui() {
 	ImGui::SliderFloat("Shadow bias", &shadowbias, 0.0f, 0.01f, "%.5f", ImGuiSliderFlags_Logarithmic);
 	ImGui::SliderFloat("Shadow Spread", &shadow_spread, 0.0f, 0.01f, "%.5f");
 	ImGui::SliderFloat("Light Size", &light_size, 0.0f, 1.0f, "%.5f");
-	
+
 
 	ImGui::InputScalarN("Light location", ImGuiDataType_Float, &light.pos, 3);
 
@@ -72,7 +72,7 @@ void crl::gui::Fancy3DApp::drawImGui() {
 	ImGuizmo::BeginFrame();
 	glm::mat4 cameraview = camera.getViewMatrix();
 	ImGuizmo::ViewManipulate(glm::value_ptr(camera.viewMatrix), 10.0, ImVec2(io.DisplaySize.x - 128, 0), ImVec2(128, 128), 0x10101010);
-	ImGui::ShowMetricsWindow();	
+	ImGui::ShowMetricsWindow();
 }
 
 void crl::gui::Fancy3DApp::draw() {
@@ -91,6 +91,7 @@ void crl::gui::Fancy3DApp::shadowPass() {
 	shadowMapFBO.BindForWriting();
 	glClear(GL_DEPTH_BUFFER_BIT);
 	shadowMapRenderer.use();
+	// set matrices for render_shadow.vert
 	shadowMapRenderer.setMat4("projection", light.getOrthoProjectionMatrix());
 	shadowMapRenderer.setMat4("view", light.getViewMatrix());
 	glViewport(0, 0, shadowMapFBO.bufferWidth, shadowMapFBO.bufferHeight);
@@ -99,17 +100,24 @@ void crl::gui::Fancy3DApp::shadowPass() {
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glUseProgram(0);
-	#ifdef RETINA_SCREEN
-		// temporal one... need more investigation
-		glViewport(0, 0, width * 2, height * 2);
-	#else
-		glViewport(0, 0, width, height);
-	#endif
+#ifdef RETINA_SCREEN
+	// temporal one... need more investigation
+	glViewport(0, 0, width * 2, height * 2);
+#else
+	glViewport(0, 0, width, height);
+#endif
 }
 
 void crl::gui::Fancy3DApp::renderPass() {
 	shadowMapFBO.BindForReading(GL_TEXTURE0, GL_TEXTURE1); // to do: organize texture units
 
+	/* projection + view:
+	 * basic_lighting.vert
+	 * texture.vert
+	 * render_shadow.vert */
+
+	 /* camPos + lightPos + lightColor: compute_shading.frag */
+	 // white light is from ShadowCastingLight light - inheriting from light
 	auto shader_setup = [&](Shader& shader) {
 		shader.use();
 		shader.setMat4("projection", camera.getProjectionMatrix());
@@ -121,8 +129,17 @@ void crl::gui::Fancy3DApp::renderPass() {
 
 	// set up shaders
 	shader_setup(shadowShader);
+	// light projection + light view: basic_lighting.vert
 	shadowShader.setMat4("lightProjection", light.getOrthoProjectionMatrix());
 	shadowShader.setMat4("lightView", light.getViewMatrix());
+	/* compute_shadow_factor.frag:
+	 * shadow map
+	 * shadow depth
+	 * bias
+	 * pcf mode
+	 * pcf samples num
+	 * shadow spread
+	 * light size */
 	shadowShader.setInt("shadowMap", 0); // shadow map is set to GL_TEXTURE0
 	shadowShader.setInt("shadowDepth", 1); // shadow depth is set to GL_TEXTURE1
 	shadowShader.setFloat("bias", shadowbias);
@@ -138,8 +155,17 @@ void crl::gui::Fancy3DApp::renderPass() {
 
 	// set silhouette shader
 	shader_setup(silhouetteShader);
+	// light projection + light view: basic_lighting.vert
 	silhouetteShader.setMat4("lightProjection", light.getOrthoProjectionMatrix());
 	silhouetteShader.setMat4("lightView", light.getViewMatrix());
+	/* compute_shadow_factor.frag:
+	 * shadow map
+	 * shadow depth
+	 * bias
+	 * pcf mode
+	 * pcf samples num
+	 * shadow spread
+	 * light size */
 	silhouetteShader.setInt("shadowMap", 0); // shadow map is set to GL_TEXTURE0
 	silhouetteShader.setInt("shadowDepth", 1); // shadow depth is set to GL_TEXTURE1
 	silhouetteShader.setFloat("bias", shadowbias);
@@ -152,7 +178,7 @@ void crl::gui::Fancy3DApp::renderPass() {
 	}
 	silhouetteShader.setFloat("shadow_spread", shadow_spread);
 	silhouetteShader.setFloat("light_size", light_size);
-	
+
 	shader_setup(basicShader);
 	// better lighting approximation here so that regions of the model do
 	// not remain forever shaded dark...

@@ -105,10 +105,12 @@ namespace crl {
 		class Shader {
 		public:
 			unsigned int ID;
+			std::string variableName;
 
 			// constructor generates the shader on the fly
 			// ------------------------------------------------------------------------
-			Shader(const char* vertexPath, const char* fragmentPath) {
+			Shader(const char* vertexPath, const char* fragmentPath, std::string name) {
+				variableName = name;
 				// 1. retrieve the vertex/fragment source code from filePath
 				std::string vertexCode = shaderString(vertexPath);
 				std::string fragmentCode = shaderString(fragmentPath);
@@ -231,6 +233,10 @@ namespace crl {
 			// ------------------------------------------------------------------------
 			void setMat4(const std::string& name, const glm::mat4& mat) const {
 				glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+			}
+
+			std::string getName() {
+				return variableName;
 			}
 		private:
 			// utility function for checking shader compilation/linking errors.

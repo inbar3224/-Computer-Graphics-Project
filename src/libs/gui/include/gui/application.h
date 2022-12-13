@@ -170,6 +170,7 @@ namespace crl {
 				shadowMapFBO.BindForWriting();
 				glClear(GL_DEPTH_BUFFER_BIT);
 				shadowMapRenderer.use();
+				// set matrices for render_shadow.vert
 				shadowMapRenderer.setMat4("projection", light.getOrthoProjectionMatrix());
 				shadowMapRenderer.setMat4("view", light.getViewMatrix());
 				glViewport(0, 0, shadowMapFBO.bufferWidth, shadowMapFBO.bufferHeight);
@@ -189,6 +190,13 @@ namespace crl {
 			void renderPass() {
 				shadowMapFBO.BindForReading(GL_TEXTURE0, GL_TEXTURE1);  // To Do: there is going to be a collision when using textured models
 
+				/* projection + view:
+				 * basic_lighting.vert
+				 * texture.vert
+				 * render_shadow.vert */
+
+				 /* camPos + lightPos + lightColor: compute_shading.frag */
+				// white light is from ShadowCastingLight light - inheriting from light
 #define SETUP_SHADER(shader)                                    \
                         shader.use();                                               \
                         shader.setMat4("projection", camera.getProjectionMatrix()); \
@@ -199,21 +207,24 @@ namespace crl {
 
 				// set up shaders
 				SETUP_SHADER(shadowShader);
+				// light projection + light view: basic_lighting.vert
 				shadowShader.setMat4("lightProjection", light.getOrthoProjectionMatrix());
 				shadowShader.setMat4("lightView", light.getViewMatrix());
+				// shadow map + bias: compute_shadow_factor.frag
 				shadowShader.setInt("shadowMap", 0);
 				shadowShader.setFloat("bias", shadowbias);
 
 				// setting silhouette shader
 				SETUP_SHADER(silhouetteShader);
+				// light projection + light view: basic_lighting.vert
 				silhouetteShader.setMat4("lightProjection", light.getOrthoProjectionMatrix());
 				silhouetteShader.setMat4("lightView", light.getViewMatrix());
+				// shadow map + bias: compute_shadow_factor.frag
 				silhouetteShader.setInt("shadowMap", 0);
 				silhouetteShader.setFloat("bias", shadowbias);
 
 				SETUP_SHADER(basicShader);
-				// better lighting approximation here so that regions of the model do
-				// not remain forever shaded dark...
+				// better lighting approximation here so that regions of the model do not remain forever shaded dark...
 				basicShader.setVec3("lightPos", camera.position());
 
 				drawObjectsWithShadows();
@@ -234,10 +245,10 @@ namespace crl {
 			ShadowMapFBO shadowMapFBO;
 			float shadowbias = 0.0001f;
 
-			Shader shadowShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/basic_shadow_lighting.frag");
-			Shader shadowMapRenderer = Shader(SHADER_FOLDER "/render_shadow.vert", SHADER_FOLDER "/render_shadow.frag");
-			Shader basicShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/basic_lighting.frag");
-			Shader silhouetteShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/silhouette.frag");
+			Shader shadowShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/basic_shadow_lighting.frag", "shadowShader");
+			Shader shadowMapRenderer = Shader(SHADER_FOLDER "/render_shadow.vert", SHADER_FOLDER "/render_shadow.frag", "shadowMapRenderer");
+			Shader basicShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/basic_lighting.frag", "basicShader");
+			Shader silhouetteShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/silhouette.frag", "silhouetteShader");
 		};
 
 		inline bool ToggleButton(const char* str_id, bool* v) {

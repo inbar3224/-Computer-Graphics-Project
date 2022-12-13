@@ -2,6 +2,7 @@
 
 #include <gui/guiMath.h>
 #include <gui/shader.h>
+#include <tiny_obj_loader.h>
 
 // possible loss of data in conversion between double and float
 #pragma warning(disable : 4244)
@@ -38,14 +39,19 @@ namespace crl {
 			std::vector<Vertex> vertices;
 			std::vector<unsigned int> indices;
 			TextureMap textures;
+			std::vector<tinyobj::face_t> faces;
+			std::vector<int> adjacencyVertices;
 
-			// the color of the mesh
-			V3D defaultColor = V3D(0.9, 0.9, 0.9);
+			/* the color of the mesh
+			 * original (0.9, 0.9, 0.9)
+			 * (0.9, 0.9, 1.0)
+			 * (1.0, 0.753, 0.796) */
+			V3D defaultColor = V3D(1.0, 0.753, 0.796);
 		private:
 			unsigned int VAO, VBO, EBO;
 		public:
 			Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
-				std::map<TextureType, std::vector<Texture>> textures);
+				std::map<TextureType, std::vector<Texture>> textures, std::vector<tinyobj::face_t> faces);
 
 			Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
 
@@ -60,6 +66,7 @@ namespace crl {
 			void draw(Shader shader, float alpha = 1.0) const;
 
 			void reinitialize(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
+			void calculateAdjacency(const unsigned int index1, const unsigned int index2, const unsigned int index3);
 		private:
 			// initializes all the buffer objects/arrays
 			void setupMesh();
