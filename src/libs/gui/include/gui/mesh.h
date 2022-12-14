@@ -31,6 +31,12 @@ namespace crl {
 			std::string path;
 		};
 
+		struct Triangle {
+			glm::vec3 point_a, point_b, point_c;
+			unsigned int index_a, index_ab, index_b, index_bc, index_c, index_ca;
+			Triangle* connection_ab, * connection_bc, * connection_ca;
+		};
+
 		class Mesh {
 		public:
 			enum TextureType { DIFFUSE, SPECULAR, NORMAL, AMBIENT };
@@ -40,7 +46,7 @@ namespace crl {
 			std::vector<unsigned int> indices;
 			TextureMap textures;
 			std::vector<tinyobj::face_t> faces;
-			std::vector<int> adjacencyVertices;
+			std::vector<unsigned int> adjacencyVertices;
 
 			/* the color of the mesh
 			 * original (0.9, 0.9, 0.9)
@@ -66,7 +72,9 @@ namespace crl {
 			void draw(Shader shader, float alpha = 1.0) const;
 
 			void reinitialize(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
-			void calculateAdjacency(const unsigned int index1, const unsigned int index2, const unsigned int index3);
+
+			bool connects(glm::vec3 point_a, glm::vec3 point_b);
+			void calculateAdjacency();
 		private:
 			// initializes all the buffer objects/arrays
 			void setupMesh();

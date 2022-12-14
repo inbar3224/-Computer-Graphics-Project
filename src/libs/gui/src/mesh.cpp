@@ -7,11 +7,39 @@ namespace crl {
 			std::map<TextureType, std::vector<Texture>> textures, std::vector<tinyobj::face_t> faces) :
 			vertices(vertices), indices(indices), textures(textures), faces(faces) {
 			setupMesh();
-			std::cout << "vertices size: " << vertices.size() << std::endl;
-			std::cout << "indices size: " << indices.size() << std::endl;
+			calculateAdjacency();
+
+			/*std::cout << "vertices size: " << vertices.size() << std::endl;
+			std::cout << "indices size: " << indices.size() << std::endl;			
+			// vertex position in groups of 3
+			for (int i = 0, j = 0; i < vertices.size(); i++) {
+				if (j % 3 == 0) {
+					std::cout << std::endl;
+				}
+				std::cout << i << std::endl;
+				std::cout << vertices[i].position.x << " " << vertices[i].position.y << " " << vertices[i].position.z << std::endl;
+				j++;
+			}
+			// indices in groups of 3
+			for (int i = 0, j = 0; i < indices.size(); i++) {
+				if (j % 3 == 0) {
+					std::cout << std::endl;
+				}
+				std::cout << indices[i] << std::endl;
+				j++;
+			}
+
+			// face's vertices index - 0, 12, 16 = 1, 13, 17
 			for (int i = 0; i < faces.size(); i++) {
 				faces[i].print();
 			}
+			
+			for (int i = 0, j = 0; i < adjacencyVertices.size(); i++, j++) {
+				if (j % 6 == 0) {
+					std::cout << std::endl;
+				}
+				std::cout << adjacencyVertices[i] << std::endl;
+			}*/
 		}
 
 		Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) :
@@ -45,7 +73,7 @@ namespace crl {
 			// draw mesh
 			glBindVertexArray(VAO);
 			if (shader.getName().compare("silhouetteShader") == 0) {
-				glDrawElements(GL_TRIANGLES_ADJACENCY, indices.size() * 6, GL_UNSIGNED_INT, nullptr);
+				glDrawElements(GL_TRIANGLES_ADJACENCY, adjacencyVertices.size(), GL_UNSIGNED_INT, nullptr);
 			}
 			else {
 				glDrawElements(GL_TRIANGLES, (GLsizei)indices.size(), GL_UNSIGNED_INT, nullptr);
@@ -106,8 +134,110 @@ namespace crl {
 			glBindVertexArray(0);
 		}
 
-		void calculateAdjacency(const unsigned int index1, const unsigned int index2, const unsigned int index3) {
+		bool Mesh::connects(glm::vec3 point_a, glm::vec3 point_b) {
+			return glm::abs(glm::length(point_a - point_b)) < 0.00000001;
+		}
 
+		void Mesh::calculateAdjacency() {
+			int triangleCount = faces.size();
+			std::vector<Triangle> triangles;
+
+			//Build basic triangle info: points a,b,c
+			for (int i = 0; i < triangleCount; i++) {
+				Triangle triangle;
+				triangle.index_a = indices[3 * i];
+				triangle.point_a = vertices[triangle.index_a].position;
+				triangle.index_b = indices[3 * i + 1];
+				triangle.point_b = vertices[triangle.index_b].position;
+				triangle.index_c = indices[3 * i + 2];
+				triangle.point_c = vertices[triangle.index_c].position;
+				triangle.connection_ab = NULL;
+				triangle.connection_bc = NULL;
+				triangle.connection_ca = NULL;
+
+				triangles.push_back(triangle);
+			}
+
+			//Connect triangles
+			for (int i = 0; i < triangleCount; i++) {
+				Triangle* triangle = &triangles[i];
+				for (int j = 0; j < triangleCount; j++) {
+					if (i == j) {
+						continue;
+					}
+
+					Triangle* triangle2 = &triangles[j];
+					if (triangle->connection_ab == NULL) {
+						//test ab edge of triangle
+						if ((connects(triangle->point_a, triangle2->point_a) && connects(triangle->point_b, triangle2->point_b)) ||
+							(connects(triangle->point_a, triangle2->point_b) && connects(triangle->point_b, triangle2->point_a))) {
+							triangle->connection_ab = triangle2;
+							triangle->index_ab = triangle2->index_c;
+						}
+						else if ((connects(triangle->point_a, triangle2->point_a) && connects(triangle->point_b, triangle2->point_c)) ||
+							(connects(triangle->point_a, triangle2->point_c) && connects(triangle->point_b, triangle2->point_a))) {
+							triangle->connection_ab = triangle2;
+							triangle->index_ab = triangle2->index_b;
+						}
+						else if ((connects(triangle->point_a, triangle2->point_b) && connects(triangle->point_b, triangle2->point_c)) ||
+							(connects(triangle->point_a, triangle2->point_c) && connects(triangle->point_b, triangle2->point_b))) {
+							triangle->connection_ab = triangle2;
+							triangle->index_ab = triangle2->index_a;
+						}
+					}
+
+					if (triangle->connection_bc == NULL) {
+						//test bc edge of triangle
+						if ((connects(triangle->point_b, triangle2->point_a) && connects(triangle->point_c, triangle2->point_b)) ||
+							(connects(triangle->point_b, triangle2->point_b) && connects(triangle->point_c, triangle2->point_a))) {
+							triangle->connection_bc = triangle2;
+							triangle->index_bc = triangle2->index_c;
+						}
+						else if ((connects(triangle->point_b, triangle2->point_a) && connects(triangle->point_c, triangle2->point_c)) ||
+							(connects(triangle->point_b, triangle2->point_c) && connects(triangle->point_c, triangle2->point_a))) {
+							triangle->connection_bc = triangle2;
+							triangle->index_bc = triangle2->index_b;
+						}
+						else if ((connects(triangle->point_b, triangle2->point_b) && connects(triangle->point_c, triangle2->point_c)) ||
+							(connects(triangle->point_b, triangle2->point_c) && connects(triangle->point_c, triangle2->point_b))) {
+							triangle->connection_bc = triangle2;
+							triangle->index_bc = triangle2->index_a;
+						}
+					}
+
+					if (triangle->connection_ca == NULL) {
+						//test ca edge of triangle
+						if ((connects(triangle->point_c, triangle2->point_a) && connects(triangle->point_a, triangle2->point_b)) ||
+							(connects(triangle->point_c, triangle2->point_b) && connects(triangle->point_a, triangle2->point_a))) {
+							triangle->connection_ca = triangle2;
+							triangle->index_ca = triangle2->index_c;
+						}
+						else if ((connects(triangle->point_c, triangle2->point_a) && connects(triangle->point_a, triangle2->point_c)) ||
+							(connects(triangle->point_c, triangle2->point_c) && connects(triangle->point_a, triangle2->point_a))) {
+							triangle->connection_ca = triangle2;
+							triangle->index_ca = triangle2->index_b;
+						}
+						else if ((connects(triangle->point_c, triangle2->point_b) && connects(triangle->point_a, triangle2->point_c)) ||
+							(connects(triangle->point_c, triangle2->point_c) && connects(triangle->point_a, triangle2->point_b))) {
+							triangle->connection_ca = triangle2;
+							triangle->index_ca = triangle2->index_a;
+						}
+					}
+
+					if (triangle->connection_ab != NULL && triangle->connection_bc != NULL && triangle->connection_ca != NULL) {
+						break;
+					}
+				}
+			}
+
+			for (Triangle triangle : triangles) {
+				adjacencyVertices.push_back(triangle.index_a);
+				adjacencyVertices.push_back(triangle.index_ab);
+				adjacencyVertices.push_back(triangle.index_b);
+				adjacencyVertices.push_back(triangle.index_bc);
+				adjacencyVertices.push_back(triangle.index_c);
+				adjacencyVertices.push_back(triangle.index_ca);
+			}
 		}
 	}  // namespace gui
 }  // namespace crl
