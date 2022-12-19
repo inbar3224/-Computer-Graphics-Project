@@ -217,11 +217,13 @@ namespace crl {
 				// setting silhouette shader
 				SETUP_SHADER(silhouetteShader);
 				// light projection + light view: basic_lighting.vert
-				silhouetteShader.setMat4("lightProjection", light.getOrthoProjectionMatrix());
-				silhouetteShader.setMat4("lightView", light.getViewMatrix());
+				//silhouetteShader.setMat4("lightProjection", light.getOrthoProjectionMatrix());
+				//silhouetteShader.setMat4("lightView", light.getViewMatrix());
 				// shadow map + bias: compute_shadow_factor.frag
-				silhouetteShader.setInt("shadowMap", 0);
-				silhouetteShader.setFloat("bias", shadowbias);
+				//silhouetteShader.setInt("shadowMap", 0);
+				//silhouetteShader.setFloat("bias", shadowbias);
+				silhouetteShader.setFloat("HalfWidth", 0.1f);
+				silhouetteShader.setFloat("OverhangLength", 0.15f);
 
 				SETUP_SHADER(basicShader);
 				// better lighting approximation here so that regions of the model do not remain forever shaded dark...
@@ -248,7 +250,7 @@ namespace crl {
 			Shader shadowShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/basic_shadow_lighting.frag", "shadowShader");
 			Shader shadowMapRenderer = Shader(SHADER_FOLDER "/render_shadow.vert", SHADER_FOLDER "/render_shadow.frag", "shadowMapRenderer");
 			Shader basicShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/basic_lighting.frag", "basicShader");
-			Shader silhouetteShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/silhouette.frag", "silhouetteShader");
+			Shader silhouetteShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/mine1.geom", "silhouetteShader");
 		};
 
 		inline bool ToggleButton(const char* str_id, bool* v) {

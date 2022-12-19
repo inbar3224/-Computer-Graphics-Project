@@ -33,7 +33,7 @@ namespace crl {
 
 		Model::Model(const std::string& path) {
 			loadModel(path);
-			std::cout << "meshes number: " << meshes.size() << std::endl;
+			//std::cout << "meshes number: " << meshes.size() << std::endl;
 		}
 
 		void Model::draw(const Shader& shader, const V3D& color, const glm::mat4& transform, float alpha) const {
