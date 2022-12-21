@@ -61,15 +61,21 @@ Week 6: 27/11/2022 - 03/12/2022
 
 Week 7: 04/12/2022 - 10/12/2022
 
-- TO DO
+- Changing strategy to focus on adjacency calculation
+- Changing tiny obj file in order to get faces vector
+- Total of 10 hours
 
 Week 8: 11/12/2022 - 17/12/2022
 
-- TO DO
+- Calculating adjacency, storing in vector
+- Checking correctness of adjacency calculation
+- Finishing draft of shader
+- Total of 15 hours
 
 Week 9: 18/12/2022 - 24/12/2022
 
-- TO DO
+- Discussion with Roi regarding progress in project
+- 
 
 Week 10: 25/12/2022 - 31/12/2022
 

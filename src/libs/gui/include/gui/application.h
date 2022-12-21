@@ -113,7 +113,7 @@ namespace crl {
 			char screenshotPath[100] = DATA_FOLDER "/out/screenshots";
 		};
 
-		class Basic3DAppWithShadows : public Application {
+		/*class Basic3DAppWithShadows : public Application {
 		public:
 			Basic3DAppWithShadows(const char* title = "Shadows demo", std::string iconPath = DATA_FOLDER "/crl_icon_grey.png") :
 				Application(title, iconPath) {
@@ -196,14 +196,14 @@ namespace crl {
 				 * render_shadow.vert */
 
 				 /* camPos + lightPos + lightColor: compute_shading.frag */
-				// white light is from ShadowCastingLight light - inheriting from light
-#define SETUP_SHADER(shader)                                    \
-                        shader.use();                                               \
-                        shader.setMat4("projection", camera.getProjectionMatrix()); \
-                        shader.setMat4("view", camera.getViewMatrix());             \
-                        shader.setVec3("camPos", camera.position());                \
-                        shader.setVec3("lightPos", light.position());               \
-                        shader.setVec3("lightColor", light.color());
+				// white light is from ShadowCastingLight light - inheriting from light*/
+/*#define SETUP_SHADER(shader)                                    \
+						shader.use();                                               \
+						shader.setMat4("projection", camera.getProjectionMatrix()); \
+						shader.setMat4("view", camera.getViewMatrix());             \
+						shader.setVec3("camPos", camera.position());                \
+						shader.setVec3("lightPos", light.position());               \
+						shader.setVec3("lightColor", light.color());
 
 				// set up shaders
 				SETUP_SHADER(shadowShader);
@@ -251,7 +251,7 @@ namespace crl {
 			Shader shadowMapRenderer = Shader(SHADER_FOLDER "/render_shadow.vert", SHADER_FOLDER "/render_shadow.frag", "shadowMapRenderer");
 			Shader basicShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/basic_lighting.frag", "basicShader");
 			Shader silhouetteShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/mine1.geom", "silhouetteShader");
-		};
+		};*/
 
 		inline bool ToggleButton(const char* str_id, bool* v) {
 			bool clicked = false;
@@ -288,17 +288,6 @@ namespace crl {
 			draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), col_bg, height * 0.5f);
 			draw_list->AddCircleFilled(ImVec2(p.x + radius + t * (width - radius * 2.0f), p.y + radius), radius - 1.5f, IM_COL32(255, 255, 255, 255));
 
-			/*
-				if (t < 0.1 || t > 0.9){
-							if (*v)
-									draw_list->AddText(ImVec2(p.x + radius / 2.0, p.y +
-				radius / 3.0), ImGui::GetColorU32(ImVec4(0.0f, 0.0f, 0.0f, 1.0f)), "On");
-							else
-									draw_list->AddText(ImVec2(p.x + width - 2 * radius -
-				radius / 2.0, p.y + radius / 3.0), ImGui::GetColorU32(ImVec4(0.0f, 0.0f,
-				0.0f, 1.0f)), "Off");
-					}
-			*/
 			return clicked;
 		}
 

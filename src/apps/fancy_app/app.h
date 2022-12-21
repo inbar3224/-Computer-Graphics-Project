@@ -30,19 +30,16 @@ public:
 		if (drawSilhouetteShading == true) {
 			model.draw(silhouetteShader);
 		}
-		if (drawSelfShadows == true) {
+		else if (drawSelfShadows == true) {
 			model.draw(shadowShader);
 		}
-
+		
 		ground.draw(shadowShader);
 	}
 
 	// objects drawn with basic shadowShader (during the render pass) will not have shadows cast on them
 	virtual void drawObjectsWithoutShadows() override {
-		if (drawSilhouetteShading == false) {
-			model.draw(basicShader);
-		}
-		if (drawSelfShadows == false) {
+		if (drawSilhouetteShading == false && drawSelfShadows == false) {
 			model.draw(basicShader);
 		}
 	}

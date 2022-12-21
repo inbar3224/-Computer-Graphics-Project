@@ -8,6 +8,13 @@ uniform float OverhangLength;
 out float gDist;
 out vec3 gSpine;
 
+in vec3 FragPos[6]; // maybe 252
+in vec3 Normal[6]; // maybe 252
+in vec2 TexCoords[6]; // maybe 252
+out vec3 geo_FragPos;
+out vec3 geo_Normal;
+out vec3 geo_TexCoords;
+
 bool IsFront(vec3 A, vec3 B, vec3 C) {
     float area = (A.x * B.y - B.x * A.y) + (B.x * C.y - C.x * B.y) + (C.x * A.y - A.x * C.y);
     return area > 0;
@@ -59,5 +66,14 @@ void main() {
         if (!IsFront(v0, v1, v2)) EmitEdge(v0, v2);
         if (!IsFront(v2, v3, v4)) EmitEdge(v2, v4);
         if (!IsFront(v0, v4, v5)) EmitEdge(v4, v0);
-    } 
+    }
+    
+    for(int i = 0; i < 6; i++) {
+        geo_FragPos = FragPos[i];
+        EmitVertex();    
+        geo_Normal = Normal[i];
+        EmitVertex();
+        geo_TexCoords = TexCoords[i];
+        EmitVertex();
+    }    
 }

@@ -128,18 +128,10 @@ namespace crl {
 				checkCompileErrors(vertex, "VERTEX");
 				
 				// fragment Shader
-				if (name.compare("silhouetteShader") == 0) {
-					fragment = glCreateShader(GL_GEOMETRY_SHADER);
-					glShaderSource(fragment, 1, &fShaderCode, nullptr);
-					glCompileShader(fragment);
-					checkCompileErrors(fragment, "GEOMETRY");
-				}
-				else {
-					fragment = glCreateShader(GL_FRAGMENT_SHADER);
-					glShaderSource(fragment, 1, &fShaderCode, nullptr);
-					glCompileShader(fragment);
-					checkCompileErrors(fragment, "FRAGMENT");
-				}
+				fragment = glCreateShader(GL_FRAGMENT_SHADER);
+				glShaderSource(fragment, 1, &fShaderCode, nullptr);
+				glCompileShader(fragment);
+				checkCompileErrors(fragment, "FRAGMENT");
 								
 				// shader Program
 				ID = glCreateProgram();
@@ -151,6 +143,53 @@ namespace crl {
 				// delete the shaders as they're linked into our program now and no
 				// longer necessery
 				glDeleteShader(vertex);
+				glDeleteShader(fragment);
+			}
+
+			Shader(const char* vertexPath, const char* geometryPath, const char* fragmentPath, std::string name) {
+				variableName = name;
+				// 1. retrieve the vertex/fragment source code from filePath
+				std::string vertexCode = shaderString(vertexPath);
+				std::string geometryCode = shaderString(geometryPath);
+				std::string fragmentCode = shaderString(fragmentPath);
+
+				const char* vShaderCode = vertexCode.c_str();
+				const char* gShaderCode = geometryCode.c_str();
+				const char* fShaderCode = fragmentCode.c_str();
+
+				// 2. compile shaders
+				unsigned int vertex, geometry, fragment;
+
+				// vertex shader
+				vertex = glCreateShader(GL_VERTEX_SHADER);
+				glShaderSource(vertex, 1, &vShaderCode, nullptr);
+				glCompileShader(vertex);
+				checkCompileErrors(vertex, "VERTEX");
+
+				// geometry shader
+				geometry = glCreateShader(GL_GEOMETRY_SHADER);
+				glShaderSource(geometry, 1, &gShaderCode, nullptr);
+				glCompileShader(geometry);
+				checkCompileErrors(geometry, "GEOMETRY");
+
+				// fragment Shader
+				fragment = glCreateShader(GL_FRAGMENT_SHADER);
+				glShaderSource(fragment, 1, &fShaderCode, nullptr);
+				glCompileShader(fragment);
+				checkCompileErrors(fragment, "FRAGMENT");
+
+				// shader Program
+				ID = glCreateProgram();
+				glAttachShader(ID, vertex);
+				glAttachShader(ID, geometry);
+				glAttachShader(ID, fragment);
+				glLinkProgram(ID);
+				checkCompileErrors(ID, "PROGRAM");
+
+				// delete the shaders as they're linked into our program now and no
+				// longer necessery
+				glDeleteShader(vertex);
+				glDeleteShader(geometry);
 				glDeleteShader(fragment);
 			}
 
