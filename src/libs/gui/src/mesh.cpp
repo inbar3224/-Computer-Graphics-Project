@@ -9,9 +9,8 @@ namespace crl {
 			setupMesh();
 			calculateAdjacency();
 
-			/*std::cout << "vertices size: " << vertices.size() << std::endl;
-			std::cout << "indices size: " << indices.size() << std::endl;			
-			// vertex position in groups of 3
+			/*// vertex position in groups of 3
+			std::cout << "vertices size: " << vertices.size() << std::endl;
 			for (int i = 0, j = 0; i < vertices.size(); i++) {
 				if (j % 3 == 0) {
 					std::cout << std::endl;
@@ -21,20 +20,21 @@ namespace crl {
 				j++;
 			}
 			// indices in groups of 3
+			std::cout << "indices size: " << indices.size() << std::endl;
 			for (int i = 0, j = 0; i < indices.size(); i++) {
 				if (j % 3 == 0) {
 					std::cout << std::endl;
 				}
 				std::cout << indices[i] << std::endl;
 				j++;
-			}
+			}*/
 
-			// face's vertices index - 0, 12, 16 = 1, 13, 17
+			/*// face's vertices index - 0, 12, 16 = 1, 13, 17
 			for (int i = 0; i < faces.size(); i++) {
 				faces[i].print();
-			}
+			}*/
 			
-			for (int i = 0, j = 0; i < adjacencyVertices.size(); i++, j++) {
+			/*for (int i = 0, j = 0; i < adjacencyVertices.size(); i++, j++) {
 				if (j % 6 == 0) {
 					std::cout << std::endl;
 				}

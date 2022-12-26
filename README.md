@@ -75,7 +75,9 @@ Week 8: 11/12/2022 - 17/12/2022
 Week 9: 18/12/2022 - 24/12/2022
 
 - Discussion with Roi regarding progress in project
-- 
+- Fixing inheritance problems
+- Passing data correctly between vertex, geometry, fragment shader
+- Total of 12 hours
 
 Week 10: 25/12/2022 - 31/12/2022
 

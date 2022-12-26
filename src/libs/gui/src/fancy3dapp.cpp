@@ -179,6 +179,9 @@ void crl::gui::Fancy3DApp::renderPass() {
 	silhouetteShader.setFloat("shadow_spread", shadow_spread);
 	silhouetteShader.setFloat("light_size", light_size);
 
+	silhouetteShader.setFloat("HalfWidth", 0.1f);
+	silhouetteShader.setFloat("OverhangLength", 0.15f);
+
 	shader_setup(basicShader);
 	// better lighting approximation here so that regions of the model do
 	// not remain forever shaded dark...

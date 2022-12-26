@@ -1,6 +1,6 @@
 
-in vec3 geo_Normal;  
-in vec3 geo_FragPos;
+in vec3 Normal;  
+in vec3 FragPos;
 in vec4 lightSpacePos;
 
 uniform vec3 lightPos; 
@@ -13,12 +13,12 @@ vec3 computeAmbientComponent(){
 }
 
 vec3 getLightDir(){
-	return normalize((camPos + lightPos) - geo_FragPos);
+	return normalize((camPos + lightPos) - FragPos);
 }
 
 vec3 computeDiffuseComponent(){
 	float diffuseStrength = 0.8;
-	vec3 norm = normalize(geo_Normal);
+	vec3 norm = normalize(Normal);
 	vec3 lightDir = getLightDir();
     float diff = max(dot(norm, lightDir), 0.0);
 	return diffuseStrength * diff * lightColor;	
@@ -26,9 +26,9 @@ vec3 computeDiffuseComponent(){
 
 vec3 computeSpecularComponent(){
     float specularStrength = 0.5;
-    vec3 viewDir = normalize(camPos - geo_FragPos);
+    vec3 viewDir = normalize(camPos - FragPos);
 	vec3 lightDir = getLightDir();	
-	vec3 norm = normalize(geo_Normal);	
+	vec3 norm = normalize(Normal);	
     vec3 reflectDir = reflect(-lightDir, norm);  
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
     return specularStrength * spec * lightColor;
