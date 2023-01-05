@@ -1,108 +1,89 @@
-#version 330 core
+#version 330
 
 layout(triangles_adjacency) in;
-layout(triangle_strip, max_vertices = 12) out;
+layout(triangle_strip, max_vertices = 15) out;
 
-uniform float HalfWidth;
-uniform float OverhangLength;
-out float gDist;
-out vec3 gSpine;
+in vec3 geoPosition[];
+in vec3 geoColor[];
+in vec3 geoNormal[];
 
-in vec3 FragPos[];
-in vec3 Normal[];
-in vec2 TexCoords[];
-out vec3 geo_FragPos;
-out vec3 geo_Normal;
-out vec2 geo_TexCoords;
+out vec3 fragmentPosition;
+out vec3 fragmentColor;
+out vec3 fragmentNormal;
+flat out float IsEdge;
 
-bool IsFront(vec3 A, vec3 B, vec3 C) {
-    float area = (A.x * B.y - B.x * A.y) + (B.x * C.y - C.x * B.y) + (C.x * A.y - A.x * C.y);
-    return area > 0;
+const float edgeWidth = 0.01;
+const float edgeExtension = 0.01;
+
+bool isFrontFacing(vec3 a, vec3 b, vec3 c) {	
+	//Is the triangle going through three points front facing?
+	return ((a.x * b.y - b.x * a.y) + (b.x * c.y - c.x * b.y) + (c.x * a.y - a.x * c.y)) > 0;
 }
 
-// article
-void EmitEdge(vec3 P0, vec3 P1) {
-    vec3  E = OverhangLength * vec3(P1.xy - P0.xy, 0);
-    vec2  V = normalize(E.xy);
-    vec3  N = vec3(-V.y, V.x, 0) * HalfWidth;
-    
-    gSpine = (P0 + 1.0) * 0.5;
-    
-    gDist = +HalfWidth;
-    gl_Position = vec4(P0 - N - E, 1); 
-    EmitVertex();
-    
-    gDist = -HalfWidth;
-    gl_Position = vec4(P0 + N - E, 1);
-    EmitVertex();
-    
-    gSpine = (P1 + 1.0) * 0.5;
-    
-    gDist = +HalfWidth;
-    gl_Position = vec4(P1 - N + E, 1); 
-    EmitVertex();
-    
-    gDist = -HalfWidth;
-    gl_Position = vec4(P1 + N + E, 1); 
-    EmitVertex();
-    
-    EndPrimitive();    
+void emitEdgeQuad(vec3 a, vec3 b) {
+
+	//Draw a quad along the line segment ab
+	vec2 extension = edgeExtension * (b.xy - a.xy);
+	vec2 ab = normalize(b.xy - a.xy);
+	
+	//for the local normal, we need a vector which is perpendicular to ab
+	vec2 n = vec2(-ab.y, ab.x) * edgeWidth;
+
+	IsEdge = 1.0;
+
+	gl_Position = vec4(a.xy - extension, a.z, 1.0);
+	EmitVertex();
+	gl_Position = vec4(a.xy - extension - n, a.z, 1.0);
+	EmitVertex();
+	gl_Position = vec4(b.xy + extension, b.z, 1.0);
+	EmitVertex();
+	gl_Position = vec4(b.xy + extension - n, b.z, 1.0);
+	EmitVertex();
+
+	EndPrimitive();
 }
-
-// zip file
-//void EmitEdge(vec3 P0, vec3 P1) {
-    //vec3  E = OverhangLength * vec3(P1.xy - P0.xy, 0);
-    //vec2  V = normalize(E.xy);
-    //vec3  N = vec3(-V.y, V.x, 0) * HalfWidth;
-    //vec3  S = -N;
-    //float D = HalfWidth;
-
-    //gSpine = P0;
-
-    //gl_Position = vec4(P0 + S - E, 1); 
-    //gDist = +D; 
-    //EmitVertex();
- 	
-    //gl_Position = vec4(P0 + N - E, 1); 
-    //gDist = -D; 
-    //EmitVertex();
-
-    //gSpine = P1;
-
-    //gl_Position = vec4(P1 + S + E, 1); 
-    //gDist = +D; 
-    //EmitVertex();
-    
-    //gl_Position = vec4(P1 + N + E, 1); 
-    //gDist = -D; 
-    //EmitVertex();
-
-    //EndPrimitive();
-//}
 
 void main() {
-    vec3 v0 = gl_in[0].gl_Position.xyz / gl_in[0].gl_Position.w;
-    vec3 v1 = gl_in[1].gl_Position.xyz / gl_in[1].gl_Position.w;
-    vec3 v2 = gl_in[2].gl_Position.xyz / gl_in[2].gl_Position.w;
-    vec3 v3 = gl_in[3].gl_Position.xyz / gl_in[3].gl_Position.w;
-    vec3 v4 = gl_in[4].gl_Position.xyz / gl_in[4].gl_Position.w;
-    vec3 v5 = gl_in[5].gl_Position.xyz / gl_in[5].gl_Position.w;
-    
-    if (IsFront(v0, v2, v4)) {
-        if (!IsFront(v0, v1, v2)) 
-            EmitEdge(v0, v2);
-        if (!IsFront(v2, v3, v4)) 
-            EmitEdge(v2, v4);
-        if (!IsFront(v0, v4, v5)) 
-            EmitEdge(v4, v0);
-    }
-    
-    for(int i = 0; i < 36; i++) {
-        geo_FragPos = FragPos[i];
-        //EmitVertex();    
-        geo_Normal = Normal[i];
-        //EmitVertex();
-        geo_TexCoords = TexCoords[i];
-        //EmitVertex();
-    }    
+	vec3 a  = gl_in[0].gl_Position.xyz / gl_in[0].gl_Position.w;
+	vec3 ab = gl_in[1].gl_Position.xyz / gl_in[1].gl_Position.w;
+	vec3 b  = gl_in[2].gl_Position.xyz / gl_in[2].gl_Position.w;
+	vec3 bc = gl_in[3].gl_Position.xyz / gl_in[3].gl_Position.w;
+	vec3 c  = gl_in[4].gl_Position.xyz / gl_in[4].gl_Position.w;
+	vec3 ca = gl_in[5].gl_Position.xyz / gl_in[5].gl_Position.w;
+
+	if (isFrontFacing(a, b, c)) {		
+		if (!isFrontFacing(a, ab, b)) {
+			emitEdgeQuad(a, b);
+		}
+
+		if (!isFrontFacing(b, bc, c)) {
+			emitEdgeQuad(b, c);
+		}
+
+		if (!isFrontFacing(c, ca, a)) {
+			emitEdgeQuad(c, a);
+		}
+	}
+
+	IsEdge = 0.0;
+
+	fragmentPosition = geoPosition[0];
+	fragmentColor = geoColor[0];
+	fragmentNormal = geoNormal[0];
+	gl_Position = gl_in[0].gl_Position;
+	EmitVertex();
+
+	fragmentPosition = geoPosition[2];
+	fragmentColor = geoColor[2];
+	fragmentNormal = geoNormal[2];
+	gl_Position = gl_in[2].gl_Position;
+	EmitVertex();
+
+	fragmentPosition = geoPosition[4];
+	fragmentColor = geoColor[4];
+	fragmentNormal = geoNormal[4];
+	gl_Position = gl_in[4].gl_Position;
+	EmitVertex();
+
+	EndPrimitive();
 }

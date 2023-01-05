@@ -63,8 +63,8 @@ namespace crl {
 			Model ground = getGroundModel();
 
 			bool drawSilhouetteShading = false;
-			Shader silhouetteShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/mine1.geom", SHADER_FOLDER "/silhouette.frag", "silhouetteShader");
-			//Shader silhouetteShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/basic_lighting.frag", "silhouetteShader");
+			//Shader silhouetteShader = Shader(SHADER_FOLDER "/basic_lighting.vert", SHADER_FOLDER "/mine1.geom", SHADER_FOLDER "/silhouette.frag", "silhouetteShader");
+			Shader silhouetteShader = Shader(SHADER_FOLDER "/silhouette2.vert", SHADER_FOLDER "/mine1.geom", SHADER_FOLDER "/silhouette.frag", "silhouetteShader");
 		private:
 			int PCF_mode = 0;
 			int PCF_samples_num = 25;

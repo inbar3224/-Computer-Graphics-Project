@@ -1,4 +1,5 @@
 #include <gui/fancy3dapp.h>
+#include <iostream>
 
 void crl::gui::Fancy3DApp::resizeWindow(int width, int height) {
 	camera.aspectRatio = float(width) / height;
@@ -153,34 +154,37 @@ void crl::gui::Fancy3DApp::renderPass() {
 	shadowShader.setFloat("shadow_spread", shadow_spread);
 	shadowShader.setFloat("light_size", light_size);
 
+	std::stringstream location;
+	int colorLoc[8], positionLoc[8], strengthLoc[8];
+
 	// set silhouette shader
 	shader_setup(silhouetteShader);
-	// light projection + light view: basic_lighting.vert
-	silhouetteShader.setMat4("lightProjection", light.getOrthoProjectionMatrix());
-	silhouetteShader.setMat4("lightView", light.getViewMatrix());
-	/* compute_shadow_factor.frag:
-	 * shadow map
-	 * shadow depth
-	 * bias
-	 * pcf mode
-	 * pcf samples num
-	 * shadow spread
-	 * light size */
-	silhouetteShader.setInt("shadowMap", 0); // shadow map is set to GL_TEXTURE0
-	silhouetteShader.setInt("shadowDepth", 1); // shadow depth is set to GL_TEXTURE1
-	silhouetteShader.setFloat("bias", shadowbias);
-	silhouetteShader.setInt("PCF_mode", PCF_mode);
-	if (PCF_mode == 1) {// PCF_mode = grid
-		silhouetteShader.setInt("PCF_samples_num", sqrt(PCF_samples_num));
-	}
-	else {
-		silhouetteShader.setInt("PCF_samples_num", PCF_samples_num);
-	}
-	silhouetteShader.setFloat("shadow_spread", shadow_spread);
-	silhouetteShader.setFloat("light_size", light_size);
-
-	silhouetteShader.setFloat("HalfWidth", 0.1f);
-	silhouetteShader.setFloat("OverhangLength", 0.15f);
+	//for (int i = 0; i < 8; i++) {
+		silhouetteShader.setVec3("lights[0].position", light.position());
+		silhouetteShader.setVec3("lights[0].color", light.color());
+		silhouetteShader.setFloat("lights[0].strength", 4.0f);
+		silhouetteShader.setVec3("lights[1].position", light.position());
+		silhouetteShader.setVec3("lights[1].color", light.color());
+		silhouetteShader.setFloat("lights[1].strength", 4.0f);
+		silhouetteShader.setVec3("lights[2].position", light.position());
+		silhouetteShader.setVec3("lights[2].color", light.color());
+		silhouetteShader.setFloat("lights[2].strength", 4.0f);
+		silhouetteShader.setVec3("lights[3].position", light.position());
+		silhouetteShader.setVec3("lights[3].color", light.color());
+		silhouetteShader.setFloat("lights[3].strength", 4.0f);
+		silhouetteShader.setVec3("lights[4].position", light.position());
+		silhouetteShader.setVec3("lights[4].color", light.color());
+		silhouetteShader.setFloat("lights[4].strength", 4.0f);
+		silhouetteShader.setVec3("lights[5].position", light.position());
+		silhouetteShader.setVec3("lights[5].color", light.color());
+		silhouetteShader.setFloat("lights[5].strength", 4.0f);
+		silhouetteShader.setVec3("lights[6].position", light.position());
+		silhouetteShader.setVec3("lights[6].color", light.color());
+		silhouetteShader.setFloat("lights[6].strength", 4.0f);
+		silhouetteShader.setVec3("lights[7].position", light.position());
+		silhouetteShader.setVec3("lights[7].color", light.color());
+		silhouetteShader.setFloat("lights[7].strength", 4.0f);
+	//}	
 
 	shader_setup(basicShader);
 	// better lighting approximation here so that regions of the model do
