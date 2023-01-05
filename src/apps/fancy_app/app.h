@@ -49,5 +49,5 @@ public:
 		return true;
 	}
 public:
-	Model model = Model(DATA_FOLDER "/meshes/cube.obj");
+	Model model = Model(DATA_FOLDER "/meshes/cube2.obj");
 };

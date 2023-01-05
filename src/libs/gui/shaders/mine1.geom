@@ -53,11 +53,11 @@ void main() {
 
 	if (isFrontFacing(a, b, c)) {		
 		if (!isFrontFacing(a, ab, b)) {
-			emitEdgeQuad(a, b);
+			emitEdgeQuad(a, ab);
 		}
 
 		if (!isFrontFacing(b, bc, c)) {
-			emitEdgeQuad(b, c);
+			emitEdgeQuad(b, bc);
 		}
 
 		if (!isFrontFacing(c, ca, a)) {
@@ -71,19 +71,19 @@ void main() {
 	fragmentColor = geoColor[0];
 	fragmentNormal = geoNormal[0];
 	gl_Position = gl_in[0].gl_Position;
-	EmitVertex();
+	//EmitVertex();
 
 	fragmentPosition = geoPosition[2];
 	fragmentColor = geoColor[2];
 	fragmentNormal = geoNormal[2];
 	gl_Position = gl_in[2].gl_Position;
-	EmitVertex();
+	//EmitVertex();
 
 	fragmentPosition = geoPosition[4];
 	fragmentColor = geoColor[4];
 	fragmentNormal = geoNormal[4];
 	gl_Position = gl_in[4].gl_Position;
-	EmitVertex();
+	//EmitVertex();
 
 	EndPrimitive();
 }

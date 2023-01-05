@@ -162,28 +162,28 @@ void crl::gui::Fancy3DApp::renderPass() {
 	//for (int i = 0; i < 8; i++) {
 		silhouetteShader.setVec3("lights[0].position", light.position());
 		silhouetteShader.setVec3("lights[0].color", light.color());
-		silhouetteShader.setFloat("lights[0].strength", 4.0f);
+		silhouetteShader.setFloat("lights[0].strength", 0.01f);
 		silhouetteShader.setVec3("lights[1].position", light.position());
 		silhouetteShader.setVec3("lights[1].color", light.color());
-		silhouetteShader.setFloat("lights[1].strength", 4.0f);
+		silhouetteShader.setFloat("lights[1].strength", 0.01f);
 		silhouetteShader.setVec3("lights[2].position", light.position());
 		silhouetteShader.setVec3("lights[2].color", light.color());
-		silhouetteShader.setFloat("lights[2].strength", 4.0f);
+		silhouetteShader.setFloat("lights[2].strength", 0.01f);
 		silhouetteShader.setVec3("lights[3].position", light.position());
 		silhouetteShader.setVec3("lights[3].color", light.color());
-		silhouetteShader.setFloat("lights[3].strength", 4.0f);
+		silhouetteShader.setFloat("lights[3].strength", 0.01f);
 		silhouetteShader.setVec3("lights[4].position", light.position());
 		silhouetteShader.setVec3("lights[4].color", light.color());
-		silhouetteShader.setFloat("lights[4].strength", 4.0f);
+		silhouetteShader.setFloat("lights[4].strength", 0.01f);
 		silhouetteShader.setVec3("lights[5].position", light.position());
 		silhouetteShader.setVec3("lights[5].color", light.color());
-		silhouetteShader.setFloat("lights[5].strength", 4.0f);
+		silhouetteShader.setFloat("lights[5].strength", 0.01f);
 		silhouetteShader.setVec3("lights[6].position", light.position());
 		silhouetteShader.setVec3("lights[6].color", light.color());
-		silhouetteShader.setFloat("lights[6].strength", 4.0f);
+		silhouetteShader.setFloat("lights[6].strength", 0.01f);
 		silhouetteShader.setVec3("lights[7].position", light.position());
 		silhouetteShader.setVec3("lights[7].color", light.color());
-		silhouetteShader.setFloat("lights[7].strength", 4.0f);
+		silhouetteShader.setFloat("lights[7].strength", 0.01f);
 	//}	
 
 	shader_setup(basicShader);
