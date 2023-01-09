@@ -81,11 +81,15 @@ Week 9: 18/12/2022 - 24/12/2022
 
 Week 10: 25/12/2022 - 31/12/2022
 
-- TO DO
+- There is a bug: we draw half filled faces instead of only silhouette lines.
+- Trying to understand the source of the problem.
+- Total of 10 hours
 
 Week 11: 01/01/2023 - 07/01/2023
 
-- TO DO
+- We fixed the problem- drawing only lines at this point.
+- New bug: the lines don't correspond with the correct shape of the object. Searching how to solve this.
+- Total of 15 hours
 
 Week 12: 08/01/2023 - 14/01/2023
 
