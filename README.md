@@ -56,7 +56,7 @@ Week 4-5 13/11/2022 - 26/11/2022
 Week 6: 27/11/2022 - 03/12/2022
 
 - Checkbox for silhouette shading
-- Beginning shader- can't find this file at this point
+- Beginning shader - can't find this file at this point
 - Total of 8 hours
 
 Week 7: 04/12/2022 - 10/12/2022
@@ -87,14 +87,17 @@ Week 10: 25/12/2022 - 31/12/2022
 
 Week 11: 01/01/2023 - 07/01/2023
 
-- We fixed the problem- drawing only lines at this point.
+- We fixed the problem - drawing only lines at this point.
 - New bug: the lines don't correspond with the correct shape of the object. Searching how to solve this.
 - Total of 15 hours
 
-Week 12: 08/01/2023 - 14/01/2023
+Week 12-13: 08/01/2023 - 21/01/2023
 
-- TO DO
+- We took a 2 weeks break in order to focus on finishing the semester
+- That break was discussed and agreed upon with Roi in advance
 
-Week 13: 15/01/2023 - 21/01/2023
+Week 14: 22/01/2023 - 28/01/2023
 
-- TO DO
+- Removing redundant code
+- Fixing shader - making it more readable
+- Still drawing lines that don't correspond with correct shape of object

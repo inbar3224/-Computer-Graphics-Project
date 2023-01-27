@@ -29,6 +29,7 @@ public:
 	virtual void drawObjectsWithShadows() override {
 		if (drawSilhouetteShading == true) {
 			model.draw(silhouetteShader);
+			//model.draw(basicShader);
 		}
 		else if (drawSelfShadows == true) {
 			model.draw(shadowShader);
@@ -49,5 +50,5 @@ public:
 		return true;
 	}
 public:
-	Model model = Model(DATA_FOLDER "/meshes/cube2.obj");
+	Model model = Model(DATA_FOLDER "/meshes/cube_frame.obj");
 };

@@ -1,5 +1,4 @@
 #include <gui/fancy3dapp.h>
-#include <iostream>
 
 void crl::gui::Fancy3DApp::resizeWindow(int width, int height) {
 	camera.aspectRatio = float(width) / height;
@@ -154,37 +153,9 @@ void crl::gui::Fancy3DApp::renderPass() {
 	shadowShader.setFloat("shadow_spread", shadow_spread);
 	shadowShader.setFloat("light_size", light_size);
 
-	std::stringstream location;
-	int colorLoc[8], positionLoc[8], strengthLoc[8];
-
 	// set silhouette shader
 	shader_setup(silhouetteShader);
-	//for (int i = 0; i < 8; i++) {
-		silhouetteShader.setVec3("lights[0].position", light.position());
-		silhouetteShader.setVec3("lights[0].color", light.color());
-		silhouetteShader.setFloat("lights[0].strength", 0.01f);
-		silhouetteShader.setVec3("lights[1].position", light.position());
-		silhouetteShader.setVec3("lights[1].color", light.color());
-		silhouetteShader.setFloat("lights[1].strength", 0.01f);
-		silhouetteShader.setVec3("lights[2].position", light.position());
-		silhouetteShader.setVec3("lights[2].color", light.color());
-		silhouetteShader.setFloat("lights[2].strength", 0.01f);
-		silhouetteShader.setVec3("lights[3].position", light.position());
-		silhouetteShader.setVec3("lights[3].color", light.color());
-		silhouetteShader.setFloat("lights[3].strength", 0.01f);
-		silhouetteShader.setVec3("lights[4].position", light.position());
-		silhouetteShader.setVec3("lights[4].color", light.color());
-		silhouetteShader.setFloat("lights[4].strength", 0.01f);
-		silhouetteShader.setVec3("lights[5].position", light.position());
-		silhouetteShader.setVec3("lights[5].color", light.color());
-		silhouetteShader.setFloat("lights[5].strength", 0.01f);
-		silhouetteShader.setVec3("lights[6].position", light.position());
-		silhouetteShader.setVec3("lights[6].color", light.color());
-		silhouetteShader.setFloat("lights[6].strength", 0.01f);
-		silhouetteShader.setVec3("lights[7].position", light.position());
-		silhouetteShader.setVec3("lights[7].color", light.color());
-		silhouetteShader.setFloat("lights[7].strength", 0.01f);
-	//}	
+	silhouetteShader.setVec3("gLightPos", light.position());
 
 	shader_setup(basicShader);
 	// better lighting approximation here so that regions of the model do
