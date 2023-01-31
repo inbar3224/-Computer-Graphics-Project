@@ -155,7 +155,6 @@ void crl::gui::Fancy3DApp::renderPass() {
 
 	// set silhouette shader
 	shader_setup(silhouetteShader);
-	silhouetteShader.setVec3("gLightPos", light.position());
 
 	shader_setup(basicShader);
 	// better lighting approximation here so that regions of the model do

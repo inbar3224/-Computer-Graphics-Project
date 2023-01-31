@@ -91,8 +91,7 @@ public:
     }
 
     glm::mat4 getProjectionMatrix() {
-        return glm::perspective(glm::radians(fieldOfView), aspectRatio, zNear,
-                                zFar);
+        return glm::perspective(glm::radians(fieldOfView), aspectRatio, zNear, zFar);
     }
 
     // xpos and ypos represent points in screen coordinates (e.g. where the

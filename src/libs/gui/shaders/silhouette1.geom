@@ -3,9 +3,9 @@
 layout (triangles_adjacency) in;
 layout (line_strip, max_vertices = 6) out;
 
-uniform vec3 gLightPos;
-
-in vec3 WorldPos0[];
+bool isFrontFacing(vec3 a, vec3 b, vec3 c) {	
+	return ((a.x * b.y - b.x * a.y) + (b.x * c.y - c.x * b.y) + (c.x * a.y - a.x * c.y)) >= 0;
+}
 
 void EmitLine(int StartIndex, int EndIndex) {
     gl_Position = gl_in[StartIndex].gl_Position;
@@ -18,35 +18,100 @@ void EmitLine(int StartIndex, int EndIndex) {
 }
 
 void main() {
-    vec3 e1 = WorldPos0[2] - WorldPos0[0];
-    vec3 e2 = WorldPos0[4] - WorldPos0[0];
-    vec3 e3 = WorldPos0[1] - WorldPos0[0];
-    vec3 e4 = WorldPos0[3] - WorldPos0[2];
-    vec3 e5 = WorldPos0[4] - WorldPos0[2];
-    vec3 e6 = WorldPos0[5] - WorldPos0[0];
+    vec3 a  = gl_in[0].gl_Position.xyz;
+	vec3 ab = gl_in[1].gl_Position.xyz;
+	vec3 b  = gl_in[2].gl_Position.xyz;
+	vec3 bc = gl_in[3].gl_Position.xyz;
+	vec3 c  = gl_in[4].gl_Position.xyz;
+	vec3 ca = gl_in[5].gl_Position.xyz;
 
-    vec3 Normal = cross(e1,e2);
-    vec3 LightDir = gLightPos - WorldPos0[0];
+	bool primary = isFrontFacing(a, b, c);
+	bool first = isFrontFacing(a, ab, b);
+	bool second = isFrontFacing(b, bc, c);
+	bool third = isFrontFacing(c, ca, a);
 
-    if (dot(Normal, LightDir) > 0.00001) {
-        Normal = cross(e3, e1);
-        if (dot(Normal, LightDir) <= 0) {
-            EmitLine(0, 1);
-            // EmitLine(0, 2);
-        }
+	if(primary == true) {
+		// first
+		if(first == true) {
+			EmitLine(0, 1);
+			EmitLine(1, 2);
+		}
+		else if(first == false) {
+			EmitLine(0, 2);
+		}
 
-        Normal = cross(e4, e5);
-        LightDir = gLightPos - WorldPos0[2];
-        if (dot(Normal, LightDir) <= 0) {
-            EmitLine(2, 3);
-            // EmitLine(2, 4);
-        }
-
-        Normal = cross(e2, e6);
-        LightDir = gLightPos - WorldPos0[4];
-        if (dot(Normal, LightDir) <= 0) {
-            EmitLine(4, 5);
-            // EmitLine(4, 0);
-        }
-    }
+		// second
+		if(second == true) {
+			EmitLine(2, 3);
+			EmitLine(3, 4);
+		}
+		else if(second == false) {
+			EmitLine(2, 4);
+		}
+		
+		// third
+		if(third == true) {
+			EmitLine(4, 5);
+			EmitLine(5, 0);
+		}
+		else if(third == false) {
+			EmitLine(4, 0);
+		}
+	}
 }
+
+// tryouts:
+// ------------------------------------ 1 -----------------------------------
+//if(first == false && second == false && third == false) {
+	//EmitLine(0, 2);
+	//EmitLine(2, 4);
+	//EmitLine(4, 0);
+//}
+//if(first == true && second == false && third == false) {
+	//EmitLine(0, 1);
+	//EmitLine(1, 2);
+	//EmitLine(2, 4);
+	//EmitLine(4, 0);
+//}
+//if(first == false && second == true && third == false) {
+	//EmitLine(0, 2);
+	//EmitLine(2, 3);
+	//EmitLine(3, 4);
+	//EmitLine(4, 0);
+//}
+//if(first == false && second == false && third == true) {
+	//EmitLine(0, 2);
+	//EmitLine(2, 4);
+	//EmitLine(4, 5);
+	//EmitLine(5, 0);
+//}
+
+// ------------------------------------ 2 -----------------------------------
+//if (isFrontFacing(a, b, c)) {		
+	//if (!isFrontFacing(a, ab, b)) {
+	//	EmitLine(0, 2);
+	//}
+
+	//if (!isFrontFacing(b, bc, c)) {
+	//	EmitLine(2, 4);
+	//}
+
+	//if (!isFrontFacing(c, ca, a)) {
+	//	EmitLine(4, 0);
+	//}
+//}
+
+// ------------------------------------ 3 -----------------------------------		
+//EmitLine(0, 1);
+//EmitLine(0, 2);
+//EmitLine(0, 4);
+//EmitLine(0, 5);
+	
+//EmitLine(1, 2);
+
+//EmitLine(2, 3);
+//EmitLine(2, 4);
+
+//EmitLine(3, 4);
+
+//EmitLine(4, 5);

@@ -99,5 +99,6 @@ Week 12-13: 08/01/2023 - 21/01/2023
 Week 14: 22/01/2023 - 28/01/2023
 
 - Removing redundant code
-- Fixing shader - making it more readable
-- Still drawing lines that don't correspond with correct shape of object
+- Fixing shader - making it more readable and correct
+- Here's a picture for demonstration
+![image1](image1.png)

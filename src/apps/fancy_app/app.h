@@ -22,17 +22,18 @@ public:
 
 	// objects drawn with a shadowMapRenderer (during shadow pass) will cast a shadow
 	virtual void drawShadowCastingObjects() override {
-		model.draw(shadowMapRenderer);
+		model1.draw(shadowMapRenderer);
 	}
 
 	// objects drawn with a shadowShader (during the render pass) will have shadows cast on them
 	virtual void drawObjectsWithShadows() override {
 		if (drawSilhouetteShading == true) {
-			model.draw(silhouetteShader);
-			//model.draw(basicShader);
+			model1.draw(silhouetteShader);
+			model2.draw(silhouetteShader);
+			model1.draw(basicShader);
 		}
 		else if (drawSelfShadows == true) {
-			model.draw(shadowShader);
+			model1.draw(shadowShader);
 		}
 		
 		ground.draw(shadowShader);
@@ -41,14 +42,15 @@ public:
 	// objects drawn with basic shadowShader (during the render pass) will not have shadows cast on them
 	virtual void drawObjectsWithoutShadows() override {
 		if (drawSilhouetteShading == false && drawSelfShadows == false) {
-			model.draw(basicShader);
+			model1.draw(basicShader);
 		}
 	}
 
 	virtual bool drop(int count, const char** fileNames) override {
-		model = Model(fileNames[count - 1]);
+		model1 = Model(fileNames[count - 1]);
 		return true;
 	}
 public:
-	Model model = Model(DATA_FOLDER "/meshes/cube_frame.obj");
+	Model model1 = Model(DATA_FOLDER "/meshes/cube4.obj");
+	Model model2 = Model(DATA_FOLDER "/meshes/cube5.obj");
 };
