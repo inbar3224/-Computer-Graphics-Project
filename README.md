@@ -100,5 +100,11 @@ Week 14: 22/01/2023 - 28/01/2023
 
 - Removing redundant code
 - Fixing shader - making it more readable and correct
-- Here's a picture for demonstration
-![image1](image1.png)
+- Total of 16 hours
+
+07/02/2023:
+
+- Testing silhouette on a number of objects
+- Recording videos of silhouette models
+![cube](cube.gif)
+![star](star.gif)

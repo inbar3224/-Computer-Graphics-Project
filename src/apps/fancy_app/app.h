@@ -53,4 +53,7 @@ public:
 public:
 	Model model1 = Model(DATA_FOLDER "/meshes/cube4.obj");
 	Model model2 = Model(DATA_FOLDER "/meshes/cube5.obj");
+
+	//Model model1 = Model(DATA_FOLDER "/meshes/star5.obj");
+	//Model model2 = Model(DATA_FOLDER "/meshes/star7.obj");	
 };
