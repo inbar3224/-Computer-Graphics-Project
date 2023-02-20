@@ -108,3 +108,10 @@ Week 14: 22/01/2023 - 28/01/2023
 - Recording videos of silhouette models
 ![cube](cube.gif)
 ![star](star.gif)
+
+Week 15: 13/02/2023 - 20/02/20203
+
+- Finding bugs in complex models and fixing it
+- New video of silhouette
+- Total of 8 hours
+![homer](homer.gif)

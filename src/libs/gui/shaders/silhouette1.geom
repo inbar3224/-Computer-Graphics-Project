@@ -33,8 +33,8 @@ void main() {
 	if(primary == true) {
 		// first
 		if(first == true) {
-			EmitLine(0, 1);
-			EmitLine(1, 2);
+			//EmitLine(0, 1);
+			//EmitLine(1, 2);
 		}
 		else if(first == false) {
 			EmitLine(0, 2);
@@ -42,8 +42,8 @@ void main() {
 
 		// second
 		if(second == true) {
-			EmitLine(2, 3);
-			EmitLine(3, 4);
+			//EmitLine(2, 3);
+			//EmitLine(3, 4);
 		}
 		else if(second == false) {
 			EmitLine(2, 4);
@@ -51,8 +51,8 @@ void main() {
 		
 		// third
 		if(third == true) {
-			EmitLine(4, 5);
-			EmitLine(5, 0);
+			//EmitLine(4, 5);
+			//EmitLine(5, 0);
 		}
 		else if(third == false) {
 			EmitLine(4, 0);
