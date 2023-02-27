@@ -11,107 +11,28 @@ Name: Avital Berendorf
 Student Number: 205815111
 
 ## Project Description:
-In this project we would load models to the screen and render the silhouette edges (outlines) around the models
+- In this project, our assignment was to load 3D models from .obj files and render not only them – but also their silhouette.
+- Based on our research, we concluded that a silhouette line is in fact "the separator" between a front facing face and a back facing face. Therefore, for every face we encountered while rendering the original model, all we had to do was understand whether or not this face is front facing or back facing – and draw a silhouette line where necessary.
+- That was our initial approach. In reality (after some more research), the process became a little more complicated. We discovered that it's not enough to understand the status of one face at a time – we had to understand its relationship with its neighboring faces and only than cast judgement regarding what to do.
+- In order to do that, we first calculated the adjacent triangles for each face in the model, and stored them in a vector to be used later. As you can see in the picture, those adjacent triangles serve as the neighboring faces to the current face in the middle (vertices 0, 2 and 4)
+![adjacent](adjacent.png)
+- After we did that, we worked with two shader: the first one was used for rendering both the model itself and the ground beneath it. Notice that this shader is responsive to changes happening to the model itself (transformations), as does camera and light transformations. 
+- The second shader was used solely for the silhouette. This shader is also responsive to the same parameters as the first one, but here we also have to consider the adjacent triangles. Neither the vertex shader nor the fragment shader knows how to deal with the relationship between triangles – and so we had to introduce a new shader – a geometry shader.
+- Based on the vector of adjacency triangles prepared for each face, the geometry shader calculate the status of 4 triangles:
+  - Current triangle (vertices 0, 2 and 4)
+  - First neighbor (vertices 0, 1 and 2)
+  - Second neighbor (vertices 2, 3 and 4)
+  - Third neighbor (vertices 4, 5 and 0)
+- If the current triangle is back facing, we don't do anything at this point. But if it's front facing, we check each neighbor and decide which lines to call the fragment shader with (depends on the status of the neighbor – front or back facing)
+- That approach has produced those results
+![cube](cube.gif)
+![star](star.gif)
+- But when we tried to move on to more complex models, that approach has produced horrible results. And so, we fixed the part where we sent lines between two front facing faces – and it worked
+![homer](homer.gif)
+- Note: if you wish to see our weekly updates regarding our progress, as does the number of hours we worked on, press here
+[a relative link](progress.md) 
 
 ## Reading Materials:
-### Truly Relevant:
 https://prideout.net/blog/old/blog/index.html@tag=opengl-silhouette.html
 
 https://gamedev.stackexchange.com/questions/68401/how-can-i-draw-outlines-around-3d-models
-
-### The Rest Of The Research:
-https://blog.vfrz.fr/2d-silhouette-effect-in-opengl/
-
-https://developer.download.nvidia.com/CgTutorial/cg_tutorial_chapter09.html
-
-http://www.opengl-tutorial.org/beginners-tutorials/tutorial-8-basic-shading/
-
-https://en.wikibooks.org/wiki/GLSL_Programming/Unity/Specular_Highlights_at_Silhouettes
-
-https://en.wikibooks.org/wiki/GLSL_Programming/Unity/Silhouette_Enhancement
-
-https://gamedev.stackexchange.com/questions/103365/glsl-2d-silhouette
-
-## Progress:
-
-The first two weeks: 23/10/2022 - 05/11/2022
-
-- Discussion about the project's main subject with Roi.
-- Researching silhouette rendering
-- Total of 8 hours
-
-Week 3: 06/11/2022 - 12/11/2022
-
-- Researching silhouette shading opengl (because the original research was irrelevant)
-- Finally nailing project's subject: using shaders to generate silhouette edges (outlines)
-- Receiving initial skeleton from Roi
-- Total 0f 12 hours
-
-Week 4-5 13/11/2022 - 26/11/2022
-
-- Research about OpenGL
-- Research about .frag files
-- Total of 6 hours
-
-Week 6: 27/11/2022 - 03/12/2022
-
-- Checkbox for silhouette shading
-- Beginning shader - can't find this file at this point
-- Total of 8 hours
-
-Week 7: 04/12/2022 - 10/12/2022
-
-- Changing strategy to focus on adjacency calculation
-- Changing tiny obj file in order to get faces vector
-- Total of 10 hours
-
-Week 8: 11/12/2022 - 17/12/2022
-
-- Calculating adjacency, storing in vector
-- Checking correctness of adjacency calculation
-- Finishing draft of shader
-- Total of 15 hours
-
-Week 9: 18/12/2022 - 24/12/2022
-
-- Discussion with Roi regarding progress in project
-- Fixing inheritance problems
-- Passing data correctly between vertex, geometry, fragment shader
-- Total of 12 hours
-
-Week 10: 25/12/2022 - 31/12/2022
-
-- There is a bug: we draw half filled faces instead of only silhouette lines.
-- Trying to understand the source of the problem.
-- Total of 10 hours
-
-Week 11: 01/01/2023 - 07/01/2023
-
-- We fixed the problem - drawing only lines at this point.
-- New bug: the lines don't correspond with the correct shape of the object. Searching how to solve this.
-- Total of 15 hours
-
-Week 12-13: 08/01/2023 - 21/01/2023
-
-- We took a 2 weeks break in order to focus on finishing the semester
-- That break was discussed and agreed upon with Roi in advance
-
-Week 14: 22/01/2023 - 28/01/2023
-
-- Removing redundant code
-- Fixing shader - making it more readable and correct
-- Total of 16 hours
-
-07/02/2023:
-
-- Testing silhouette on a number of objects
-- Recording videos of silhouette models
-![cube](cube.gif)
-![star](star.gif)
-
-Week 15: 13/02/2023 - 20/02/20203
-
-- Finding bugs in complex models and fixing it
-- New video of silhouette
-- Total of 8 hours
-![homer](homer.gif)
